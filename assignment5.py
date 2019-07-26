@@ -8,8 +8,9 @@ with open("Assignment5_input.txt", 'r') as instructionsobj:
 with open("registers.txt", 'r+') as registersobj:
     for lines in registersobj:
         registers = list(registersobj)
+
+#Take the register list and turn all the elements into integers
 register_list = []
-#Take the register list and make all the elements into integers 
 for i in registers:
     register_list.append(int(i.strip()))
 
@@ -23,7 +24,18 @@ data_memory = [10, 13, 0]
 #initialize program counter
 PC = 0 
 
+
 print("\n\t\tBeginning of Program")
+
+'''
+Rd = Destination register in R/I format 
+Rt = Destination register in D/CB format 
+Rn = Second register in R-format and base address in D-format
+Rm = Third register in R-format 
+imm = immediate
+address = offset address in loads/store
+num = unconditional branch
+'''
 
 #There are 20 instructions with 3 spaces so 23 instructions to fetch 
 while PC < 23:
@@ -41,10 +53,10 @@ while PC < 23:
 #------------------------------------------------------------#            
             y = instruction_memory[PC][16]
             z = y + instruction_memory[PC][17]
-            Rm = z + instruction_memory[PC][18]
-            Rm = int(Rm)
+            imm = z + instruction_memory[PC][18]
+            imm = int(imm)
 #------------------------------------------------------------#            
-            wtor = register_list[Rn] + Rm
+            wtor = register_list[Rn] + imm
             register_list.pop(Rd)
             register_list.insert(Rd, wtor)
 #------------------------------------------------------------#            
@@ -91,20 +103,20 @@ while PC < 23:
         elif instruction_memory[PC][3] == 'R':
             #print("STUR")
             w = instruction_memory[PC][6]
-            Rd = w + instruction_memory[PC][7]
-            Rd = int(Rd)
+            Rt = w + instruction_memory[PC][7]
+            Rt = int(Rt)
 #------------------------------------------------------------#            
             x = instruction_memory[PC][11]
             Rn = x + instruction_memory[PC][12]
             Rn = int(Rn)
 #------------------------------------------------------------#            
             y = instruction_memory[PC][16]
-            Rm = y + instruction_memory[PC][17]
-            Rm = int(Rm)
+            address = y + instruction_memory[PC][17]
+            address = int(address)
 #------------------------------------------------------------#            
-            wtor = register_list[int(Rn)-1] + int(Rm)
+            wtor = register_list[Rn-1] + address
             data_memory.pop(wtor)
-            data_memory.insert(wtor, register_list[Rd])
+            data_memory.insert(wtor, register_list[Rt])
             print("Data Memory ", data_memory)
 #------------------------------------------------------------#            
 #------------------------------------------------------------#            
@@ -119,10 +131,10 @@ while PC < 23:
             Rn = int(Rn)
 #------------------------------------------------------------#            
             y = instruction_memory[PC][16]
-            Rm = y + instruction_memory[PC][17]
-            Rm = int(Rm)
+            imm = y + instruction_memory[PC][17]
+            imm = int(imm)
 #------------------------------------------------------------#            
-            wtor = register_list[Rn] - Rm
+            wtor = register_list[Rn] - imm
             register_list.pop(Rd)
             register_list.insert(Rd, wtor)
 #------------------------------------------------------------#            
@@ -131,32 +143,32 @@ while PC < 23:
         if instruction_memory[PC][3] == 'R':
             #print("LDUR")
             w = instruction_memory[PC][6]
-            Rd = w + instruction_memory[PC][7]
-            Rd = int(Rd)
+            Rt = w + instruction_memory[PC][7]
+            Rt = int(Rt)
 #------------------------------------------------------------#            
             x = instruction_memory[PC][11]
             Rn = x + instruction_memory[PC][12]
             Rn = int(Rn)
 #------------------------------------------------------------#            
             y = instruction_memory[PC][16]
-            Rm = y + instruction_memory[PC][17]
-            Rm = int(Rm)
+            address = y + instruction_memory[PC][17]
+            address = int(address)
 #------------------------------------------------------------#            
-            wtor = register_list[int(Rn)-1] + int(Rm)
+            wtor = register_list[Rn-1] + address
             wtor = data_memory[wtor]
-            register_list.pop(Rd)
-            register_list.insert(Rd, wtor)
+            register_list.pop(Rt)
+            register_list.insert(Rt, wtor)
 #------------------------------------------------------------#            
 #------------------------------------------------------------#            
     if instruction_memory[PC][0] == 'C':
         w = instruction_memory[PC][6] 
-        Rd = w + instruction_memory[PC][7]
-        Rd = int(Rd)
+        Rt = w + instruction_memory[PC][7]
+        Rt = int(Rt)
 #------------------------------------------------------------#            
-        if register_list[Rd] == 0:
-            PC = PC + 4
+        if register_list[Rt] == 0:
+            PC = PC + 4 
             break
-        elif register_list[Rd] != 0:
+        elif register_list[Rt] != 0:
             print("")
 #------------------------------------------------------------#            
 #------------------------------------------------------------#            
@@ -169,7 +181,5 @@ while PC < 23:
     PC = PC + 1
     
 print("\t\tEnd of program")
-        
-        
 
-        
+
