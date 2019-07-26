@@ -26,11 +26,9 @@ print(instruction_memory[0][11],instruction_memory[0][12] )
 #for lines in range(10,16):
     #print(instruction_memory[lines])
 
-  
-#print(instruction_memory[1][0], instruction_memory[1][3])
-
  
-for PC in range(22):
+while PC < 23:
+#for PC in range(22): 
     print(instruction_memory[PC])
     if instruction_memory[PC][0] == 'A':
         if instruction_memory[PC][3] == 'I':
@@ -48,12 +46,10 @@ for PC in range(22):
             Rm = int(Rm)
             print(type(Rm))
             print("ADDI", Rn, Rm)
-            wtor = register_list[int(Rn)-1] + int(Rm)
+            wtor = register_list[Rn] + Rm
             print(wtor)
-            register_list.pop(Rd-1)
-            register_list.insert(Rd-1, wtor)
-            print(register_list)
-            PC = PC + 1
+            register_list.pop(Rd)
+            register_list.insert(Rd, wtor)
         elif instruction_memory[PC][3] == ' ':
             print("ADD")
             #print(instruction_memory[PC-1])
@@ -69,12 +65,10 @@ for PC in range(22):
             Rm = y + instruction_memory[PC][17]
             Rm = int(Rm)
             print(Rm)
-            wtor = register_list[Rn-1] + register_list[Rm-1]
+            wtor = register_list[Rn] + register_list[Rm]
             print(wtor)
-            register_list.pop(Rd-1)
-            register_list.insert(Rd-1, wtor)
-            print(register_list)
-            PC = PC + 1
+            register_list.pop(Rd)
+            register_list.insert(Rd, wtor)
     if instruction_memory[PC][0] == 'S':
         if instruction_memory[PC][3] == ' ':
             print("SUB")
@@ -90,12 +84,10 @@ for PC in range(22):
             Rm = y + instruction_memory[PC][17]
             Rm = int(Rm)
             print(Rm)
-            wtor = register_list[Rn-1] - register_list[Rm-1]
+            wtor = register_list[Rn] - register_list[Rm]
             print(wtor)
-            register_list.pop(Rd-1)
-            register_list.insert(Rd-1, wtor)
-            print(register_list)
-            PC = PC + 1
+            register_list.pop(Rd)
+            register_list.insert(Rd, wtor)
         elif instruction_memory[PC][3] == 'R':
             print("STUR")
             w = instruction_memory[PC][6]
@@ -115,9 +107,8 @@ for PC in range(22):
             print(wtor)
             #wtor = data_memory[wtor]
             data_memory.pop(wtor)
-            data_memory.insert(wtor, register_list[Rd-1])
+            data_memory.insert(wtor, register_list[Rd])
             print("**********", data_memory)
-            print(register_list)  
         elif instruction_memory[PC][3] == 'I':
             print("SUBI")
             w = instruction_memory[PC][6]
@@ -132,12 +123,10 @@ for PC in range(22):
             Rm = y + instruction_memory[PC][17]
             Rm = int(Rm)
             print(Rm)
-            wtor = register_list[Rn-1] - Rm
+            wtor = register_list[Rn] - Rm
             print(wtor)
             register_list.pop(Rd)
             register_list.insert(Rd, wtor)
-            print(register_list)
-            PC = PC + 1
     if instruction_memory[PC][0] == 'L':
         if instruction_memory[PC][3] == 'R':
             print("LDUR")
@@ -157,26 +146,33 @@ for PC in range(22):
             wtor = register_list[int(Rn)-1] + int(Rm)
             print(wtor)
             wtor = data_memory[wtor]
-            register_list.pop(Rd-1)
-            register_list.insert(Rd-1, wtor)
-            print(register_list)
-            PC = PC + 1
+            register_list.pop(Rd)
+            register_list.insert(Rd, wtor)
     if instruction_memory[PC][0] == 'C':
         w = instruction_memory[PC][6] 
         Rd = w + instruction_memory[PC][7]
         Rd = int(Rd)
         print(register_list[Rd])
-        if register_list[Rd-1] == 0:
+        if register_list[Rd] == 0:
             PC = PC + 4
+            break
             print("&&&&&&&&")
-        elif register_list[Rd-1] != 0:
-            PC = PC + 1
+        elif register_list[Rd] != 0:
             print("********")
     if instruction_memory[PC][0] == 'B':
         w = instruction_memory[PC][6]
         num = w + instruction_memory[PC][7]
-        PC = PC + int(num)
+        num = int(num)-1
         print(num)
+        print(PC)
+        PC = PC + num
+        print(PC)
+        print(type(PC))
+    print(register_list)
+    PC = PC + 1
+    
+#
+print("End of program")
         
         
 
