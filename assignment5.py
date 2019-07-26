@@ -16,7 +16,7 @@ print(register_list[0])
 
 data_memory = [10, 13, 0]
 
-PC = 0 #initialize pogram counter
+PC = 0 #initialize program counter
 
 #print the instruction_memory - test
 #print(instruction_memory[0]) 
@@ -30,7 +30,7 @@ print(instruction_memory[0][11],instruction_memory[0][12] )
 #print(instruction_memory[1][0], instruction_memory[1][3])
 
  
-for PC in range(12):
+for PC in range(22):
     print(instruction_memory[PC])
     if instruction_memory[PC][0] == 'A':
         if instruction_memory[PC][3] == 'I':
@@ -116,7 +116,7 @@ for PC in range(12):
             #wtor = data_memory[wtor]
             data_memory.pop(wtor)
             data_memory.insert(wtor, register_list[Rd-1])
-            print("**********", data_memory[2])
+            print("**********", data_memory)
             print(register_list)  
         elif instruction_memory[PC][3] == 'I':
             print("SUBI")
@@ -132,10 +132,10 @@ for PC in range(12):
             Rm = y + instruction_memory[PC][17]
             Rm = int(Rm)
             print(Rm)
-            wtor = register_list[Rn-1] - register_list[Rm-1]
+            wtor = register_list[Rn-1] - Rm
             print(wtor)
-            register_list.pop(Rd-1)
-            register_list.insert(Rd-1, wtor)
+            register_list.pop(Rd)
+            register_list.insert(Rd, wtor)
             print(register_list)
             PC = PC + 1
     if instruction_memory[PC][0] == 'L':
@@ -161,7 +161,23 @@ for PC in range(12):
             register_list.insert(Rd-1, wtor)
             print(register_list)
             PC = PC + 1
-
+    if instruction_memory[PC][0] == 'C':
+        w = instruction_memory[PC][6] 
+        Rd = w + instruction_memory[PC][7]
+        Rd = int(Rd)
+        print(register_list[Rd])
+        if register_list[Rd-1] == 0:
+            PC = PC + 4
+            print("&&&&&&&&")
+        elif register_list[Rd-1] != 0:
+            PC = PC + 1
+            print("********")
+    if instruction_memory[PC][0] == 'B':
+        w = instruction_memory[PC][6]
+        num = w + instruction_memory[PC][7]
+        PC = PC + int(num)
+        print(num)
+        
         
 
         
