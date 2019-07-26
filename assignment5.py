@@ -14,7 +14,7 @@ for i in registers:
 print(register_list)
 print(register_list[0])
 
-data_memory = [10, 13]
+data_memory = [10, 13, 0]
 
 PC = 0 #initialize pogram counter
 
@@ -30,7 +30,7 @@ print(instruction_memory[0][11],instruction_memory[0][12] )
 #print(instruction_memory[1][0], instruction_memory[1][3])
 
  
-for PC in range(11):
+for PC in range(12):
     print(instruction_memory[PC])
     if instruction_memory[PC][0] == 'A':
         if instruction_memory[PC][3] == 'I':
@@ -110,12 +110,13 @@ for PC in range(11):
             Rm = y + instruction_memory[PC][17]
             Rm = int(Rm)
             print(type(Rm))
-            print("ADDI", Rn, Rm)
+            print("STUR", Rn, Rm)
             wtor = register_list[int(Rn)-1] + int(Rm)
             print(wtor)
-            wtor = data_memory[wtor]
-            register_list.pop(Rd-1)
-            register_list.insert(Rd-1, wtor)
+            #wtor = data_memory[wtor]
+            data_memory.pop(wtor)
+            data_memory.insert(wtor, register_list[Rd-1])
+            print("**********", data_memory[2])
             print(register_list)  
         elif instruction_memory[PC][3] == 'I':
             print("SUBI")
