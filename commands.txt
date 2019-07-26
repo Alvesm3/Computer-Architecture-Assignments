@@ -1,23 +1,23 @@
 
-ADDI X21, X31, #19
-ADDI X22, X31, #54
-ADDI X23, X31, #80
-ADDI X24, X31, #13
+ADDI X21, X31, #019
+ADDI X22, X31, #054
+ADDI X23, X31, #080
+ADDI X24, X31, #013
 ADD  X09, X23, X24
 SUB  X10, X22, X21
 ADD  X11, X09, X10
 
-ADD  X21, X31, X31
+ADD  X21, X31, X31 // up data memory DMEM[0] = 10, DMEM[1] = 13
 LDUR X09, X21, #00
 LDUR X10, X21, #01
 ADD  X11, X09, X10
 STUR X11, X21, #02
 
-ADDI X21, X31, #00
-ADDI X22, X31, #100
-ADDI X23, X31, #10
-SUBI X09, X21, #04
-CBZ  X09, 4
+ADDI X21, X31, #000  //X21 = 0 (i = 0 for loop)
+ADDI X22, X31, #100  //X22 = 100
+ADDI X23, X31, #010  //X23 = 10
+SUBI X09, X21, #04  //compare i with 4
+CBZ  X09,  04       //if i is 4 exit for loop
 SUB  X22, X22, X23	
-ADDI X21, X21, #01
-B    -4
+ADDI X21, X21, #001  //i++
+B     -4            //loop back up to compare again++
