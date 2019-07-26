@@ -21,3 +21,6 @@ CBZ  X09,  04       //if i is 4 exit for loop
 SUB  X22, X22, X23	
 ADDI X21, X21, #001  //i++
 B     -4            //loop back up to compare again++
+
+
+
