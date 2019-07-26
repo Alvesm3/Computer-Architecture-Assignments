@@ -7,7 +7,7 @@ ADD  X09, X23, X24
 SUB  X10, X22, X21
 ADD  X11, X09, X10
 
-ADD  X21, X31, X31 // up data memory DMEM[0] = 10, DMEM[1] = 13
+ADD  X21, X31, X31 //setup data memory DMEM[0] = 10, DMEM[1] = 13
 LDUR X09, X21, #00
 LDUR X10, X21, #01
 ADD  X11, X09, X10
