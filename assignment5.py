@@ -15,15 +15,20 @@ for i in registers:
     register_list.append(int(i.strip()))
 
 #Initialize Register list 
-print("\t\tEmpty Registers")
-print(register_list)
+print("\t\tEmpty Registers\n")
+print(register_list, "\n")
+
+print("\t\tInstruction Memory\n")
+for lines in instruction_memory:
+    print(lines)
 
 #data memory list for loads and stores 
-data_memory = [10, 13, 0]
+data_memory = [10, 13, 0]    
+print("\n\t\tData Memory")
+print(data_memory)
 
 #initialize program counter
 PC = 0 
-
 
 print("\n\t\tBeginning of Program")
 
@@ -177,9 +182,7 @@ while PC < 23:
         num = w + instruction_memory[PC][7]
         num = int(num)-1
         PC = PC + num
-    print(PC, register_list)
+    print(PC+1, register_list)
     PC = PC + 1
     
 print("\t\tEnd of program")
-
-
