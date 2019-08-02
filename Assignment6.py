@@ -3,7 +3,17 @@ with open("registers.txt", 'r+') as registersobj:
     for lines in registersobj:
         registers = list(registersobj)
 
+#Take the register list and turn all the elements into integers
+register_list = []
+for i in registers:
+    register_list.append(int(i.strip()))
+
 PC = 0
+
+#data memory list for loads and stores 
+data_memory = [10, 13, 0]    
+#print("\n\t\tData Memory")
+#print(data_memory)
 
 instruction_memory = []
 
@@ -27,6 +37,7 @@ STUR = 4
 LDUR = 5 
 CBZ = 6 
 B = 7
+decode = [opcode, Rd, Rn, immediate, Rt, Rm]
 '''
 def instructiondecode(enter):
     decode = []
@@ -154,20 +165,83 @@ def instructiondecode(enter):
         decode[2] = 0
         decode[4] = 0
         decode[5] = 0
+    return decode
+'''
+execute = [0/1/2, destination, value]
+'''
+def execute(enter):
+    execute = []
+    if enter[0] == 0:
+        execute[0] = 0
+        execute[1] = enter[1]
+        wtor = register_list[enter[2]] + enter[3]
+        execute[2] = wtor
+    elif enter[0] == 1:
+        execute[0] = 0
+        execute[1] = enter[1]
+        wtor = register_list[enter[2]] + register_list[enter[5]]
+        execute[2] = wtor
+    elif enter[0] == 2:
+        execute[0] = 0
+        execute[1] = enter[1]
+        wtor = register_list[enter[2]] - enter[3]
+        execute[2] = wtor
+    elif enter[0] == 3:
+        execute[0] = 0
+        execute[1] = enter[1]
+        wtor = register_list[enter[2]] - register_list[enter[5]]
+        execute[2] = wtor
+    elif enter[0] == 4:
+        execute[0] = 1
+        execute[1] = enter[4]
+        execute[2] = enter[2] + register_list[enter[3]]
+    elif enter[0] == 5:
+        execute[0] = 2
+        execute[1] = enter[4]
+        execute[2] = enter[2] + register_list[enter[3]]
+    elif enter[0] == 6:
+        execute[0] = 0
+        execute[1] = 0
+        execute[2] = 0
+        if enter[4] == 0:
+            PC = PC + 4 
+            break
+        elif enter[4] != 0:
+            pass
+    elif enter[0] == 7:
+        execute[0] = 0
+        execute[1] = 0
+        execute[2] = 0
+        num = enter[3] - 1
+        PC = PC + num
+    return execute
+        
 
-def execute():
-    pass
-
-def datamemory():
-    pass
-
-def writeback():
-    pass
+def datamemory(enter):
+#R-format does not use datamemory     
+    if enter[0] == 0:
+        return enter
+    elif enter[0] == 1:
+        data_memory.pop(enter[1])
+        data_memory.insert(enter[1], enter[2])
+        return enter
+    elif enter[0] == 2:
+        register_list.pop(enter[1])
+        register_list.insert(enter[1], enter[2])
+        return enter
+        
+def writeback(enter):
+    #D-format does not use writeback
+    if enter[0] == 1 or 2:
+        pass
+    elif enter[0] == 0:
+        register_list.pop(enter[1])
+        register_list.insert(enter[1], enter[2])
 
 pipeline1 = " " #string
 pipeline2 = [] #list of ints
 pipeline3 = [] #list of ints
-pipeline4 = []
+pipeline4 = [] #list of instructions
 
 
 while PC < 22:
