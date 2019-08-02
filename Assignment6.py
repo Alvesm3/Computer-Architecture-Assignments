@@ -8,6 +8,7 @@ register_list = []
 for i in registers:
     register_list.append(int(i.strip()))
 
+#intialize Program counter
 PC = 0
 
 #data memory list for loads and stores 
@@ -172,7 +173,7 @@ def instructiondecode(enter):
 '''
 execute = [0/1/2, destination, value]
 '''
-def execute(enter):
+def execute(enter, PC):
     execute = [0,0,0]
     if enter[0] == 0:
         execute[0] = 0
@@ -195,9 +196,10 @@ def execute(enter):
         wtor = register_list[enter[2]] - register_list[enter[5]]
         execute[2] = wtor
     elif enter[0] == 4:
+        print(register_list[enter[3]])
         execute[0] = 1
         execute[1] = enter[4]
-        execute[2] = enter[2] + register_list[enter[3]]
+        execute[2] = enter[3] + register_list[enter[2]]
     elif enter[0] == 5:
         execute[0] = 2
         execute[1] = enter[4]
@@ -215,7 +217,8 @@ def execute(enter):
         execute[0] = 0
         execute[1] = 0
         execute[2] = 0
-        num = enter[3] - 1
+        num = enter[3]+1
+        print(num)
         PC = PC + num
     return execute
         
@@ -225,8 +228,9 @@ def datamemory(enter):
     if enter[0] == 0:
         return enter
     elif enter[0] == 1:
-        data_memory.pop(enter[1])
-        data_memory.insert(enter[1], enter[2])
+        print(enter[2])
+        data_memory.pop(enter[2])
+        data_memory.insert(enter[2], enter[1])
         return enter
     elif enter[0] == 2:
         register_list.pop(enter[1])
@@ -249,10 +253,10 @@ pipeline3 = [0,0,0] #list of ints
 pipeline4 = [0,0,0] #list of instructions
 
 
-while PC < 83:
+while PC < 86:
     writeback(pipeline4)
     pipeline4 = datamemory(pipeline3)
-    pipeline3 = execute(pipeline2)
+    pipeline3 = execute(pipeline2, PC)
     pipeline2 = instructiondecode(pipeline1)
     pipeline1 = instructionfetch()
     PC = PC + 1
