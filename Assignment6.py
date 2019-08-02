@@ -40,7 +40,8 @@ B = 7
 decode = [opcode, Rd, Rn, immediate, Rt, Rm]
 '''
 def instructiondecode(enter):
-    decode = []
+    decode = [0,0,0,0,0,0]
+    print(enter)
     if enter[0] == 'A':
         if enter[3] == 'I':
             decode[0] = 0
@@ -165,12 +166,14 @@ def instructiondecode(enter):
         decode[2] = 0
         decode[4] = 0
         decode[5] = 0
+    if enter[0] == 's':
+        pass
     return decode
 '''
 execute = [0/1/2, destination, value]
 '''
 def execute(enter):
-    execute = []
+    execute = [0,0,0]
     if enter[0] == 0:
         execute[0] = 0
         execute[1] = enter[1]
@@ -205,7 +208,7 @@ def execute(enter):
         execute[2] = 0
         if enter[4] == 0:
             PC = PC + 4 
-            break
+            exit()
         elif enter[4] != 0:
             pass
     elif enter[0] == 7:
@@ -232,19 +235,21 @@ def datamemory(enter):
         
 def writeback(enter):
     #D-format does not use writeback
-    if enter[0] == 1 or 2:
+    if enter[0] == 1:
+        pass
+    elif enter[0] == 2:
         pass
     elif enter[0] == 0:
         register_list.pop(enter[1])
         register_list.insert(enter[1], enter[2])
 
-pipeline1 = " " #string
-pipeline2 = [] #list of ints
-pipeline3 = [] #list of ints
-pipeline4 = [] #list of instructions
+pipeline1 = "sssssssssssssssssssssssssssssss" #string
+pipeline2 = [0,0,0,0,0,0] #list of ints
+pipeline3 = [0,0,0] #list of ints
+pipeline4 = [0,0,0] #list of instructions
 
 
-while PC < 22:
+while PC < 83:
     writeback(pipeline4)
     pipeline4 = datamemory(pipeline3)
     pipeline3 = execute(pipeline2)
