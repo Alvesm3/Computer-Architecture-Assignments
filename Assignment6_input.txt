@@ -1,0 +1,86 @@
+
+ADDI X21, X31, #019
+ADDI X22, X31, #054
+ADDI X23, X31, #080
+ADDI X24, X31, #013
+stall
+stall
+stall
+stall
+stall
+ADD  X09, X23, X24
+SUB  X10, X22, X21
+stall
+stall
+stall
+stall
+stall
+ADD  X11, X09, X10
+stall
+stall
+stall
+stall
+stall
+ADD  X21, X31, X31  //setup data memory DMEM[0] = 10, DMEM[1] = 13
+stall
+stall
+stall
+stall
+stall
+LDUR X09, X21, #00
+LDUR X10, X21, #01
+stall
+stall
+stall
+stall
+stall
+ADD  X11, X09, X10
+stall
+stall
+stall
+stall
+stall
+STUR X11, X21, #02
+stall
+stall
+stall
+stall
+stall
+ADDI X21, X31, #000  //X21 = 0 (i = 0 for loop)
+ADDI X22, X31, #100  //X22 = 100
+ADDI X23, X31, #010  //X23 = 10
+stall
+stall
+stall
+stall
+stall
+SUBI X09, X21, #04  //compare i with 4
+stall
+stall
+stall
+stall
+stall 
+CBZ  X09,  04       //if i is 4 exit for loop
+stall
+stall
+stall
+stall
+stall
+SUB  X22, X22, X23	
+stall
+stall
+stall
+stall
+stall
+ADDI X21, X21, #001  //i++
+stall
+stall
+stall
+stall
+stall
+B    -28            //loop back up to compare again++
+stall
+stall
+stall
+stall
+stall
