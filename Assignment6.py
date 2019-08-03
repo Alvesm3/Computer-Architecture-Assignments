@@ -189,6 +189,9 @@ def execute(enter, PC):
         execute[0] = 0
         execute[1] = enter[1]
         wtor = register_list[enter[2]] - enter[3]
+        print(enter[2])
+        print("%%%%%%%%%%", wtor)
+        print("$$",enter[3])
         execute[2] = wtor
     elif enter[0] == 3:
         execute[0] = 0
@@ -203,23 +206,24 @@ def execute(enter, PC):
     elif enter[0] == 5:
         execute[0] = 2
         execute[1] = enter[4]
-        execute[2] = enter[2] + register_list[enter[3]]
+        execute[2] = enter[3] + register_list[enter[2]]
+        print("?????????",execute[2])
     elif enter[0] == 6:
         execute[0] = 0
         execute[1] = 0
         execute[2] = 0
-        if enter[4] == 0:
-            PC = PC + 4 
-            exit()
-        elif enter[4] != 0:
-            pass
+        print(register_list[enter[4]])
+        if register_list[enter[4]] == 0:
+            execute[0] = 4
+            execute[1] = -30
+        elif register_list[enter[4]] != 0:
+            execute[0] = 0
+            execute[1] = 0
     elif enter[0] == 7:
-        execute[0] = 0
-        execute[1] = 0
+        execute[0] = 3
         execute[2] = 0
         num = enter[3]+1
-        print(num)
-        PC = PC + num
+        execute[1] = num
     return execute
         
 
@@ -229,23 +233,38 @@ def datamemory(enter):
         return enter
     elif enter[0] == 1:
         print(enter[2])
-        data_memory.pop(enter[2])
-        data_memory.insert(enter[2], enter[1])
+        data_memory.pop(enter[1])
+        data_memory.insert(enter[1], enter[2])
         return enter
     elif enter[0] == 2:
         register_list.pop(enter[1])
         register_list.insert(enter[1], enter[2])
         return enter
+    elif enter[0] == 3:
+        return enter
+    elif enter[0] == 4:
+        return enter
         
-def writeback(enter):
+def writeback(enter, PC):
     #D-format does not use writeback
     if enter[0] == 1:
-        pass
+        PC = PC + 1
+        return PC
     elif enter[0] == 2:
-        pass
+        PC = PC + 1
+        return PC 
     elif enter[0] == 0:
         register_list.pop(enter[1])
         register_list.insert(enter[1], enter[2])
+        PC = PC + 1
+        return PC
+    elif enter[0] == 3:
+        print("***********", enter[1])
+        PC = PC - enter[1]
+        return PC
+    elif enter[0] == 4:
+        PC = PC + 100
+        return PC
 
 pipeline1 = "sssssssssssssssssssssssssssssss" #string
 pipeline2 = [0,0,0,0,0,0] #list of ints
@@ -254,9 +273,11 @@ pipeline4 = [0,0,0] #list of instructions
 
 
 while PC < 86:
-    writeback(pipeline4)
+    num = writeback(pipeline4, PC)
     pipeline4 = datamemory(pipeline3)
     pipeline3 = execute(pipeline2, PC)
+    print(PC)
     pipeline2 = instructiondecode(pipeline1)
     pipeline1 = instructionfetch()
-    PC = PC + 1
+    PC = num
+    print(PC, register_list)
