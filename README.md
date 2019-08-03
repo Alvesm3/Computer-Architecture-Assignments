@@ -1,4 +1,4 @@
-#Computer Architerure Assignments 
+# Computer Architerure Assignments 
 
 Computer Architecture Assignment 5 by Matt Alves, John Solari, and Mike Ho
 
