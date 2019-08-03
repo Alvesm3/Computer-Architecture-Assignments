@@ -7,27 +7,41 @@ with open("registers.txt", 'r+') as registersobj:
 register_list = []
 for i in registers:
     register_list.append(int(i.strip()))
+        
+#Read the file with all the instructions
+with open("Assignment6_input.txt", 'r') as instructionsobj:
+    for line in instructionsobj:
+        printinstructions = list(instructionsobj) 
+
+#Initialize Register list 
+print("\t\tEmpty Registers\n")
+print(register_list, "\n")
+
+#print all the instructions
+print("\t\tInstruction Memory\n")
+for lines in printinstructions:
+    print(lines)
+
+#intialize data memory list for loads and stores 
+data_memory = [10, 13, 0]    
+print("\n\t\tData Memory")
+print(data_memory, "\n")
 
 #intialize Program counter
 PC = 0
 
-#data memory list for loads and stores 
-data_memory = [10, 13, 0]    
-#print("\n\t\tData Memory")
-#print(data_memory)
-
+#instructions list for instruction fetch
 instruction_memory = []
 
 def instructionfetch():
     #Read the file with all the instructions
-    with open("Assignment5_input.txt", 'r') as instructionsobj:
+    with open("Assignment6_input.txt", 'r') as instructionsobj:
         for lines in instructionsobj:
             instruction = list(instructionsobj) #store each line into a list called instruction_memory -> this will allow for easy indexing of each instruction
     for i in instruction:
         instruction_memory.append(i.strip())
     return instruction_memory[PC]
         
-#print(type(instructionfetch()))
 '''
 Opcodes
 ADDI = 0
@@ -117,12 +131,10 @@ def instructiondecode(enter):
             Rt = w + enter[7]
             Rt = int(Rt)
             decode[4] = Rt
-#------------------------------------------------------------#            
             x = enter[11]
             Rn = x + enter[12]
             Rn = int(Rn)
             decode[2] = Rn
-#------------------------------------------------------------#            
             y = enter[16]
             address = y + enter[17]
             address = int(address) 
@@ -135,12 +147,10 @@ def instructiondecode(enter):
         Rt = w + enter[7]
         Rt = int(Rt)
         decode[4] = Rt
-#------------------------------------------------------------#            
         x = enter[11]
         Rn = x + enter[12]
         Rn = int(Rn)
         decode[2] = Rn
-#------------------------------------------------------------#            
         y = enter[16]
         address = y + enter[17]
         address = int(address) 
@@ -171,7 +181,12 @@ def instructiondecode(enter):
         pass
     return decode
 '''
-execute = [0/1/2, destination, value]
+execute = [0/1/2/3/4, destination, value]
+0 = R-format and I-format
+1 = STUR
+2 = LDUR
+3 = B
+4 = CBZ
 '''
 def execute(enter, PC):
     execute = [0,0,0]
@@ -220,7 +235,14 @@ def execute(enter, PC):
         execute[1] = num
     return execute
         
-
+'''
+Handles
+LDUR (Memory to register)
+STUR (Register to memory)
+If the execution is neither LDUR or STUR
+then the function just passes the array 
+to Writeback
+'''
 def datamemory(enter):
 #R-format does not use datamemory     
     if enter[0] == 0:
@@ -228,7 +250,7 @@ def datamemory(enter):
     elif enter[0] == 1:
         data_memory.pop(enter[1])
         data_memory.insert(enter[1], enter[2])
-        print(data_memory)
+        print("Data Memory", data_memory)
         return enter
     elif enter[0] == 2:
         register_list.pop(enter[1])
@@ -238,7 +260,12 @@ def datamemory(enter):
         return enter
     elif enter[0] == 4:
         return enter
-        
+'''
+Handles R-format, I-format, CB-format, and B-format
+Writes to registers and increments program counter
+to the next instruction.
+Handles conditional branch zero and branch backwards
+'''
 def writeback(enter, PC):
     #D-format does not use writeback
     if enter[0] == 1:
@@ -258,18 +285,18 @@ def writeback(enter, PC):
     elif enter[0] == 4:
         PC = PC + 100
         return PC
-
+        
+#Intialize pipline lists 
 pipeline1 = "sssssssssssssssssssssssssssssss" #stall
 pipeline2 = [0,0,0,0,0,0] #list of ints
 pipeline3 = [0,0,0] #list of ints
 pipeline4 = [0,0,0] #list of instructions
 
-
+#ARM processor with pipelining 
 while PC < 86:
     num = writeback(pipeline4, PC)
     pipeline4 = datamemory(pipeline3)
     pipeline3 = execute(pipeline2, PC)
-    print(PC)
     pipeline2 = instructiondecode(pipeline1)
     pipeline1 = instructionfetch()
     PC = num
